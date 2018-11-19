@@ -12,13 +12,12 @@
 //entidade pessoa -- struct;
 struct Pessoa {
     int id, idade, responsavel, dependentes, cargo;
-    char cpf[11], nome[50], senha[16];
+    char cpf[15], nome[50], senha[16];
     bool carencia;
     
 };
 struct Ingresso {
-	int id, cliente;
-	char peca;
+	int id, cliente,peca,assento;
 };
 
 struct Assento {
@@ -26,26 +25,30 @@ struct Assento {
 	bool ocupado;
 };
 struct Peca {
-	int id, dia, mes, ano, horas, minutos;
-	char nome[30];
+	int id, dia, mes, ano, horas, minutos ;
+	char nome[30],*pNome;
 	float preco;
 };
 
 int main() {
     //FILE *fPessoa, *fIngresso, *fAssento;
-    int loop, indexPessoa=0, counterDisponivel = 1;
+    int loop, indexPessoa=0, counterDisponivel = 1, qtdIngresso = 0, i=0;
     
 	//inicializa array de struct cadeira, test mode
     struct Pessoa *pessoa = (struct Pessoa*)malloc(sizeof(struct Pessoa));
     struct Assento *assento = (struct Assento*)malloc(sizeof(struct Assento));
     struct Peca *peca = (struct Peca*)malloc(sizeof(struct Peca));
+    struct Ingresso *ingresso = (struct Ingresso*)malloc(sizeof(struct Ingresso));
 	//inicio da interação com o usuário
 	printf("Compra de ingressos \n");
 	//init peça
 	peca[0].id = 1;
 	peca[1].id = 2;
 	peca[2].id = 3;
-	peca[0].nome[30] = "Peça teste 1\0";
+	peca[0].pNome = &peca[0].nome;
+	peca[0].pNome = "Test";
+	//[30] = "Peca teste 1\0"
+	printf("%s \n%d \n\n\n\n", peca[0].nome, peca[0].pNome);
 	peca[1].nome[30] = "Teatro magico\0";
 	peca[2].nome[30] = "Barbixas\0";
 	peca[0].preco = 60.00;
@@ -70,21 +73,26 @@ int main() {
 	//nome
 	printf("Para autorizar a compra de ingressos, precisamos de suas informacoes pessoais\n\n");
 	printf("Digite seu nome \n");
-	scanf("%s", &pessoa[indexPessoa].nome);
+	scanf("%[^\n]s", &pessoa[indexPessoa].nome);
 	printf("Digite seu CPF com pontuacao\n");
-	scanf("%s", &pessoa[indexPessoa].cpf );
+	scanf("%s", &pessoa[indexPessoa].cpf);
 	printf("digite sua idade\n");
 	scanf("%d", &pessoa[indexPessoa].idade);
 	printf("Digite o numero correspondente a sua ocupacao\n");
-	printf("1-Cliente Comum\n2-Estudadte\n3-Professor");
+	printf("1-Cliente Comum\n2-Estudadte\n3-Professor\n");
 	scanf("%d", &pessoa[indexPessoa].cargo);
 		
+//	system("cls");
 	printf("escolha sua peca digitando o numero correspondente\n");
-	for (loop = 0; loop < sizeof(pessoa)/ sizeof(struct Pessoa); loop++){
+	
+	for (loop = 0; loop < 3; loop++){
+		printf("---------------");
 		printf("%d - %s \n",peca[loop].id, peca[loop].nome);
-		printf("Data e hora: \n %d/%d/%d - %d:%d", peca[loop].dia,peca[loop].mes,peca[loop].ano,peca[loop].horas,peca[loop].minutos);
-		
+		printf("Data e hora: \n %d/%d/%d - %d:%d\n", peca[loop].dia,peca[loop].mes,peca[loop].ano,peca[loop].horas,peca[loop].minutos);
 	}
+	scanf("%d", &ingresso[0].peca);
+	printf("\nid da peca na struct ingresso: %d \n\n\n", ingresso[0].peca);
+	ingresso[0].cliente = pessoa[indexPessoa].id;
 	
 	loop = 0;
 	
@@ -102,16 +110,16 @@ int main() {
 		}else {
 			assento[loop].ocupado = false;
 		}
-		//ajusta espaçamento
+		
 		
 	    //Imprime apenas os assentos livres
 		
 		if (assento[loop].ocupado == 1){
 		}else {
 			if(loop < 9){
-				printf(" 00");
+				printf("   ");
 			}else if(loop < 99){
-				printf(" 0");
+				printf("  ");
 			}else{
 				printf(" ");
 			}
@@ -123,9 +131,20 @@ int main() {
 		if((counterDisponivel) % 20==0){
 			printf("\n");
 		}
+		
 	}
 	
-		
+	scanf("\n%d", &ingresso[0].assento);
+	printf("teste 1\n");
+//    system("CLS");
+    printf("dados do ingresso\n id: %d\n id do cliente: %d\n id da peca: %d\n assento: %d\n", ingresso[0].id, ingresso[0].cliente, ingresso[0].peca, ingresso[0].assento);
+    printf("numero do ingresso: %d\n ",ingresso[0].id);
+    printf("Nome da peca: %s\n", peca[ingresso[0].peca].nome);
+    printf("Numero do assento: %d\n", ingresso[0].assento);
+    printf("Dados do cliente");
+    printf("Nome: %s\n", pessoa[ingresso[0].cliente].nome);
+    printf("Documento: %s\n", pessoa[ingresso[0].cliente].cpf);
+    printf("Valor do ingresso: %f\n", peca[ingresso[0].peca].preco);
     
     
 
